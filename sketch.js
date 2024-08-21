@@ -1,17 +1,30 @@
-let cols = 50;
-let rows = 80;
-let grid = [];
+const cols = 50;
+const rows = 80;
+const margin = [80, 100];
+const grid = [];
 
 function setup() {
   createCanvas(800, 800);
-  let xStep = width / (cols - 1);
-  let yStep = height / (rows - 1);
+
+  // Where do we start and end drawing in terms of (x,y) pixels?
+  const xStart = margin[0];
+  const xEnd = width - margin[0];
+  const yStart = margin[1];
+  const yEnd = height - margin[1];
+
+  // How many pixels do we move for each point in the grid
+  let xStep = (width - (2*margin[0])) / (cols - 1);
+  let yStep = (height - (2*margin[1])) / (rows - 1);
 
   // Create the grid of points
   for (let i = 0; i < cols; i++) {
     let col = [];
+
+    // For each column, create an array with the points
     for (let j = 0; j < rows; j++) {
-      col.push(createVector(i * xStep, j * yStep));
+      const x = xStart + i * xStep;
+      const y = yStart + j * yStep;
+      col.push(createVector(x, y));
     }
     grid.push(col);
   }
@@ -31,10 +44,10 @@ function draw() {
       let p2 = grid[i + 1][j];
       // Draw a curve between points in neighboring columns
       beginShape();
-      curveVertex(p1.x, p1.y);
-      curveVertex(p1.x, p1.y);
-      curveVertex(p2.x, p2.y);
-      curveVertex(p2.x, p2.y);
+    //   curveVertex(p1.x, p1.y);
+    //   curveVertex(p1.x, p1.y);
+    //   curveVertex(p2.x, p2.y);
+    //   curveVertex(p2.x, p2.y);
       endShape();
     }
   }
@@ -45,7 +58,7 @@ function draw() {
       let p1 = grid[i][j];
       let p2 = grid[i][j + 1];
       // Draw a line between points in neighboring rows
-    //   line(p1.x, p1.y, p2.x, p2.y);
+      line(p1.x, p1.y, p2.x, p2.y);
     }
   }
 }
