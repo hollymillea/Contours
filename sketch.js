@@ -1,4 +1,4 @@
-const cols = 50;
+const cols = 100;
 const rows = 80;
 const margin = [80, 100];
 const grid = [];
@@ -8,26 +8,13 @@ function setup() {
 
   // Where do we start and end drawing in terms of (x,y) pixels?
   const xStart = margin[0];
-  const xEnd = width - margin[0];
   const yStart = margin[1];
-  const yEnd = height - margin[1];
 
   // How many pixels do we move for each point in the grid
   let xStep = (width - (2*margin[0])) / (cols - 1);
   let yStep = (height - (2*margin[1])) / (rows - 1);
 
-  // Create the grid of points
-  for (let i = 0; i < cols; i++) {
-    let col = [];
-
-    // For each column, create an array with the points
-    for (let j = 0; j < rows; j++) {
-      const x = xStart + i * xStep;
-      const y = yStart + j * yStep;
-      col.push(createVector(x, y));
-    }
-    grid.push(col);
-  }
+  createGridPoints(xStart, yStart, xStep, yStep);
 
   noLoop(); // Prevents continuous drawing
 }
@@ -61,4 +48,34 @@ function draw() {
       line(p1.x, p1.y, p2.x, p2.y);
     }
   }
+}
+
+
+function createGridPoints(xStart, yStart, xStep, yStep) {
+  // For each column
+  for (let i = 0; i < cols; i++) {
+    let col = [];
+
+    // Create an array with the points that make up this column
+    for (let j = 0; j < rows; j++) {
+      const x = xStart + i * xStep;
+      const y = yStart + j * yStep;
+
+      const move = getNoiseVal(x, y);
+
+      // Now we want to distort this point using Perlin noise
+
+      col.push(createVector(x*move, y));
+    }
+    grid.push(col);
+  }
+}
+
+
+function getNoiseVal(x, y) {
+    const noiseZoom = 0.001;
+    
+    const noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
+
+    return noiseVal;
 }
