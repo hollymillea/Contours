@@ -84,7 +84,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
       let move = getNoiseVal(x, y);
 
       // We scale this noise value so that it's more visible
-      move *= 10;
+      move *= 20;
 
       // Update the position
       const newX = x + direction.x * move;
@@ -98,7 +98,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 }
 
 function getNoiseVal(x, y) {
-  const noiseZoom = 0.001;
+  const noiseZoom = 0.0005;
 
   let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
 
@@ -131,16 +131,15 @@ function transformNoise(x) {
 
   if (x > start && x < end) {
     y = 1;
+  } else if (x <= start) {
+    x = map(x, 0, start, 0, 1);
+    // Imagine a circle being drawn with centre (1, 0) and radius 1. We are using the top left quadrant as a function
+    y = sqrt(1 - (x - 1) * (x - 1));
   }
-  // Sine curve starting from 0 (y=0) to start (y=1)
-  else if (x <= start) {
-    x = map(x, 0, start, 0, PI / 2);
-    y = sin(x);
-  }
-  // Sine curve starting from end (y=1) to 1 (y=0)
+  // Imagine a circle being drawn with centre (0, 0) and radius 1. We are using the top right quadrant as a function
   else {
-    x = map(x, end, 1, PI / 2, PI);
-    y = sin(x);
+    x = map(x, end, 1, 0, 1);
+    y = sqrt(1 - x * x);
   }
 
   y = map(y, 0, 1, -1, 1);
