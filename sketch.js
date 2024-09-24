@@ -68,7 +68,7 @@ function draw() {
 
 function createGridPoints(xStart, yStart, xStep, yStep) {
   // What direction do we want to shift the points in?
-  const direction = createVector(0, 1);
+  const direction = createVector(1, 1);
 
   // For each column
   for (let i = 0; i < cols; i++) {
@@ -122,5 +122,9 @@ function transformNoise(x) {
 
   y = map(y, 0, 1, -1, 1);
 
-  return y;
+  if (y < 0) y = -y;
+
+  y = map(y, 0, 1, -1, 1);
+
+  return 1 - y;
 }
