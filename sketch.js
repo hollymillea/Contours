@@ -66,7 +66,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
       let move = getNoiseVal(x, y);
 
       // We scale this noise value so that it's more visible
-      move *= 2.5;
+      move *= 3;
 
       // Update the position
       const newX = x + direction.x * move;
@@ -95,7 +95,7 @@ function getNoiseVal(x, y) {
 // If frequency = 10, then the sine wave goes from -1 to 1 from input values 0 to 0.1
 // The sine wave then decreases from 1 to -1 and the input value goes from 0.1 to 0.2 and so on
 function transformNoise(x) {
-  const frequency = 40;
+  const frequency = 80;
 
   x *= frequency;
   x *= 2 * PI;
