@@ -24,6 +24,15 @@ function draw() {
   stroke(0);
   noFill();
 
+  // Increase the stroke weight
+  strokeWeight(2);
+
+  const [r, g, b] = [random(255), random(255), random(255)];
+  const [r2, g2, b2] = [random(255), random(255), random(255)];
+
+  const colour1 = color(r, g, b, 255);
+  const colour2 = color(r2, g2, b2, 100);
+
   // Draw vertical lines
   for (let i = 0; i < cols; i++) {
     const columnCoordinates = grid[i];
@@ -37,6 +46,13 @@ function draw() {
 
   // Draw horizontal lines
   for (let i = 0; i < rows; i++) {
+    // Alternate the colour of the lines
+    if (i % 2 === 0) {
+      stroke(colour1);
+    } else {
+      stroke(colour2);
+    }
+
     beginShape();
 
     for (let j = 0; j < cols; j++) {
