@@ -40,8 +40,8 @@ function draw() {
   }
 
   // Draw vertical lines between rows
-  for (let j = 0; j < rows - 1; j++) {
-    for (let i = 0; i < cols; i++) {
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows - 1; j++) {
       let p1 = grid[i][j];
       let p2 = grid[i][j + 1];
       // Draw a line between points in neighboring rows
@@ -89,15 +89,24 @@ function getNoiseVal(x, y) {
   let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
 
   // Map between -1 and 1
-  noiseVal = map(noiseVal, 0, 1, -1, 1);
-
-  if (noiseVal < -0.3) {
-    // noiseVal = -1;
-  }
-
-  if (noiseVal > 0.7) {
-    // noiseVal = 1;
-  }
+  // noiseVal = map(noiseVal, 0, 1, -1, 1);
+  noiseVal = transformNoise(noiseVal);
 
   return noiseVal;
+}
+
+// We use a sin wave to transform the noise values into something that oscillates a bit more
+// If frequency = 10, then the sine wave goes from -1 to 1 from input values 0 to 0.1
+// The sine wave then decreases from 1 to -1 and the input value goes from 0.1 to 0.2 and so on
+function transformNoise(x) {
+  const frequency = 10;
+
+  x *= frequency;
+  x *= 2 * PI;
+
+  let y = sin(x);
+
+  y = map(y, 0, 1, -1, 1);
+
+  return y;
 }
