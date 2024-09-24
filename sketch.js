@@ -1,5 +1,5 @@
 const cols = 200;
-const rows = 250;
+const rows = 280;
 const margin = [80, 100];
 const grid = [];
 
@@ -30,8 +30,16 @@ function draw() {
   const [r, g, b] = [random(255), random(255), random(255)];
   const [r2, g2, b2] = [random(255), random(255), random(255)];
 
-  const colour1 = color(r, g, b, 255);
-  const colour2 = color(r2, g2, b2, 100);
+  // Halfway between the colours
+  const r3 = (r + r2) / 2;
+  const g3 = (g + g2) / 2;
+  const b3 = (b + b2) / 2;
+
+  const colours = [
+    color(r, g, b, 255),
+    color(r3, g3, b3, 255),
+    color(r2, g2, b2, 255),
+  ];
 
   // Draw vertical lines
   for (let i = 0; i < cols; i++) {
@@ -47,11 +55,9 @@ function draw() {
   // Draw horizontal lines
   for (let i = 0; i < rows; i++) {
     // Alternate the colour of the lines
-    if (i % 2 === 0) {
-      stroke(colour1);
-    } else {
-      stroke(colour2);
-    }
+    const n = colours.length;
+    const colour = colours[i % n];
+    stroke(colour);
 
     beginShape();
 
