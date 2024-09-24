@@ -1,5 +1,5 @@
 const cols = 200;
-const rows = 80;
+const rows = 150;
 const margin = [80, 100];
 const grid = [];
 
@@ -24,22 +24,7 @@ function draw() {
   stroke(0);
   noFill();
 
-  // Draw horizontal curves between columns
-  for (let i = 0; i < cols - 1; i++) {
-    for (let j = 0; j < rows; j++) {
-      let p1 = grid[i][j];
-      let p2 = grid[i + 1][j];
-      // Draw a curve between points in neighboring columns
-      beginShape();
-      //   curveVertex(p1.x, p1.y);
-      //   curveVertex(p1.x, p1.y);
-      //   curveVertex(p2.x, p2.y);
-      //   curveVertex(p2.x, p2.y);
-      endShape();
-    }
-  }
-
-  // Draw vertical lines between rows
+  // Draw vertical lines
   for (let i = 0; i < cols; i++) {
     const columnCoordinates = grid[i];
 
@@ -49,11 +34,23 @@ function draw() {
     });
     endShape();
   }
+
+  // Draw horizontal lines
+  for (let i = 0; i < rows; i++) {
+    beginShape();
+
+    for (let j = 0; j < cols; j++) {
+      let p = grid[j][i];
+      curveVertex(p.x, p.y);
+    }
+
+    endShape();
+  }
 }
 
 function createGridPoints(xStart, yStart, xStep, yStep) {
   // What direction do we want to shift the points in?
-  const direction = createVector(1, 0);
+  const direction = createVector(1, 1);
 
   // For each column
   for (let i = 0; i < cols; i++) {
@@ -83,7 +80,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 }
 
 function getNoiseVal(x, y) {
-  const noiseZoom = 0.005;
+  const noiseZoom = 0.001;
 
   let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
 
