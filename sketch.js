@@ -35,11 +35,7 @@ function draw() {
   const g3 = (g + g2) / 2;
   const b3 = (b + b2) / 2;
 
-  const colours = [
-    color(r, g, b, 255),
-    color(r3, g3, b3, 255),
-    color(r2, g2, b2, 255),
-  ];
+  const colours = [color(r, g, b, 255), color(r, g, b, 210)];
 
   // Draw vertical lines
   for (let i = 0; i < cols; i++) {
@@ -117,7 +113,7 @@ function getNoiseVal(x, y) {
 // If frequency = 10, then the sine wave goes from -1 to 1 from input values 0 to 0.1
 // The sine wave then decreases from 1 to -1 and the input value goes from 0.1 to 0.2 and so on
 function transformNoise(x) {
-  const frequency = 40;
+  const frequency = 20;
 
   x *= frequency;
   x *= 2 * PI;
