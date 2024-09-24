@@ -68,7 +68,7 @@ function draw() {
 
 function createGridPoints(xStart, yStart, xStep, yStep) {
   // What direction do we want to shift the points in?
-  const direction = createVector(1, 1);
+  const direction = createVector(0, 1);
 
   // For each column
   for (let i = 0; i < cols; i++) {
@@ -84,7 +84,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
       let move = getNoiseVal(x, y);
 
       // We scale this noise value so that it's more visible
-      move *= 3;
+      move *= 10;
 
       // Update the position
       const newX = x + direction.x * move;
@@ -98,7 +98,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 }
 
 function getNoiseVal(x, y) {
-  const noiseZoom = 0.0005;
+  const noiseZoom = 0.001;
 
   let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
 
@@ -113,18 +113,37 @@ function getNoiseVal(x, y) {
 // If frequency = 10, then the sine wave goes from -1 to 1 from input values 0 to 0.1
 // The sine wave then decreases from 1 to -1 and the input value goes from 0.1 to 0.2 and so on
 function transformNoise(x) {
-  const frequency = 20;
+  const n = 10;
 
-  x *= frequency;
-  x *= 2 * PI;
+  const frequency = 1 / n;
 
-  let y = sin(x);
+  x = x % frequency;
+
+  var y;
+
+  x *= n;
+
+  // This must be less than 0.5. It determines what proportion of the sine wave is a straight line
+  const gap = 0.3;
+
+  let start = 0.5 - gap;
+  let end = 0.5 + gap;
+
+  if (x > start && x < end) {
+    y = 1;
+  }
+  // Sine curve starting from 0 (y=0) to start (y=1)
+  else if (x <= start) {
+    x = map(x, 0, start, 0, PI / 2);
+    y = sin(x);
+  }
+  // Sine curve starting from end (y=1) to 1 (y=0)
+  else {
+    x = map(x, end, 1, PI / 2, PI);
+    y = sin(x);
+  }
 
   y = map(y, 0, 1, -1, 1);
 
-  if (y < 0) y = -y;
-
-  y = map(y, 0, 1, -1, 1);
-
-  return y;
+  return 1 - y;
 }
