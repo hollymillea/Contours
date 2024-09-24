@@ -41,12 +41,13 @@ function draw() {
 
   // Draw vertical lines between rows
   for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows - 1; j++) {
-      let p1 = grid[i][j];
-      let p2 = grid[i][j + 1];
-      // Draw a line between points in neighboring rows
-      line(p1.x, p1.y, p2.x, p2.y);
-    }
+    const columnCoordinates = grid[i];
+
+    beginShape();
+    columnCoordinates.forEach((point) => {
+      curveVertex(point.x, point.y);
+    });
+    endShape();
   }
 }
 
@@ -66,8 +67,6 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 
       // How much do we want to shift this point?
       let move = getNoiseVal(x, y);
-
-      console.log(move);
 
       // We scale this noise value so that it's more visible
       move *= 10;
