@@ -1,4 +1,4 @@
-const cols = 100;
+const cols = 200;
 const rows = 80;
 const margin = [80, 100];
 const grid = [];
@@ -11,8 +11,8 @@ function setup() {
   const yStart = margin[1];
 
   // How many pixels do we move for each point in the grid
-  let xStep = (width - (2*margin[0])) / (cols - 1);
-  let yStep = (height - (2*margin[1])) / (rows - 1);
+  let xStep = (width - 2 * margin[0]) / (cols - 1);
+  let yStep = (height - 2 * margin[1]) / (rows - 1);
 
   createGridPoints(xStart, yStart, xStep, yStep);
 
@@ -20,7 +20,7 @@ function setup() {
 }
 
 function draw() {
-  background(255);
+  background(250);
   stroke(0);
   noFill();
 
@@ -31,10 +31,10 @@ function draw() {
       let p2 = grid[i + 1][j];
       // Draw a curve between points in neighboring columns
       beginShape();
-    //   curveVertex(p1.x, p1.y);
-    //   curveVertex(p1.x, p1.y);
-    //   curveVertex(p2.x, p2.y);
-    //   curveVertex(p2.x, p2.y);
+      //   curveVertex(p1.x, p1.y);
+      //   curveVertex(p1.x, p1.y);
+      //   curveVertex(p2.x, p2.y);
+      //   curveVertex(p2.x, p2.y);
       endShape();
     }
   }
@@ -50,32 +50,54 @@ function draw() {
   }
 }
 
-
 function createGridPoints(xStart, yStart, xStep, yStep) {
+  // What direction do we want to shift the points in?
+  const direction = createVector(1, 0);
+
   // For each column
   for (let i = 0; i < cols; i++) {
     let col = [];
 
     // Create an array with the points that make up this column
     for (let j = 0; j < rows; j++) {
-      const x = xStart + i * xStep;
-      const y = yStart + j * yStep;
+      // The original position of this point
+      let x = xStart + i * xStep;
+      let y = yStart + j * yStep;
 
-      const move = getNoiseVal(x, y);
+      // How much do we want to shift this point?
+      let move = getNoiseVal(x, y);
 
-      // Now we want to distort this point using Perlin noise
+      console.log(move);
 
-      col.push(createVector(x*move, y));
+      // We scale this noise value so that it's more visible
+      move *= 10;
+
+      // Update the position
+      const newX = x + direction.x * move;
+      const newY = y + direction.y * move;
+
+      col.push(createVector(newX, newY));
     }
+
     grid.push(col);
   }
 }
 
-
 function getNoiseVal(x, y) {
-    const noiseZoom = 0.001;
-    
-    const noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
+  const noiseZoom = 0.005;
 
-    return noiseVal;
+  let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
+
+  // Map between -1 and 1
+  noiseVal = map(noiseVal, 0, 1, -1, 1);
+
+  if (noiseVal < -0.3) {
+    // noiseVal = -1;
+  }
+
+  if (noiseVal > 0.7) {
+    // noiseVal = 1;
+  }
+
+  return noiseVal;
 }
