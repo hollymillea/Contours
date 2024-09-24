@@ -1,5 +1,5 @@
 const cols = 200;
-const rows = 280;
+const rows = 300;
 const margin = [80, 100];
 const grid = [];
 
@@ -68,7 +68,7 @@ function draw() {
 
 function createGridPoints(xStart, yStart, xStep, yStep) {
   // What direction do we want to shift the points in?
-  const direction = createVector(0, 1);
+  const direction = createVector(1, 1);
 
   // For each column
   for (let i = 0; i < cols; i++) {
@@ -84,7 +84,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
       let move = getNoiseVal(x, y);
 
       // We scale this noise value so that it's more visible
-      move *= 3;
+      move *= 10;
 
       // Update the position
       const newX = x + direction.x * move;
@@ -98,7 +98,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 }
 
 function getNoiseVal(x, y) {
-  const noiseZoom = 0.001;
+  const noiseZoom = 0.0005;
 
   let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
 
@@ -142,7 +142,7 @@ function transformNoise(x) {
     y = sqrt(1 - x * x);
   }
 
-  y = map(y, 0, 1, -1, 1);
+  // y = map(y, 0, 1, -1, 1);
 
   return 1 - y;
 }
