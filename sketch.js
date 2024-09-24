@@ -4,7 +4,7 @@ const margin = [80, 100];
 const grid = [];
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(800, 1000);
 
   // Where do we start and end drawing in terms of (x,y) pixels?
   const xStart = margin[0];
@@ -102,7 +102,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 }
 
 function getNoiseVal(x, y) {
-  const noiseZoom = 0.0005;
+  const noiseZoom = 0.0004;
 
   let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
 
