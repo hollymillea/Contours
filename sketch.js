@@ -126,5 +126,5 @@ function transformNoise(x) {
 
   y = map(y, 0, 1, -1, 1);
 
-  return 1 - y;
+  return y;
 }
