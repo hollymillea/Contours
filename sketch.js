@@ -42,7 +42,7 @@ function draw() {
 
   createGridPoints(xStart, yStart, xStep, yStep);
 
-  time += 0.005;
+  time += 0.008;
 
   // Draw vertical lines
   for (let i = 0; i < cols; i++) {
@@ -110,7 +110,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 function getNoiseVal(x, y) {
   const noiseZoom = 0.0005;
 
-  let noiseVal = noise(x * noiseZoom + time, y * noiseZoom + 0);
+  let noiseVal = noise(x * noiseZoom + 0, y * noiseZoom + 0, time);
 
   // Map between -1 and 1
   // noiseVal = map(noiseVal, 0, 1, -1, 1);
