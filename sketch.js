@@ -1,22 +1,35 @@
 const cols = 200;
 const rows = 300;
 const margin = [80, 100];
-const grid = [];
+let grid = [];
+let colours = [];
+let time = 0;
+
+var xStart, yStart, xStep, yStep;
 
 function setup() {
   createCanvas(800, 1000);
 
   // Where do we start and end drawing in terms of (x,y) pixels?
-  const xStart = margin[0];
-  const yStart = margin[1];
+  xStart = margin[0];
+  yStart = margin[1];
 
   // How many pixels do we move for each point in the grid
-  let xStep = (width - 2 * margin[0]) / (cols - 1);
-  let yStep = (height - 2 * margin[1]) / (rows - 1);
+  xStep = (width - 2 * margin[0]) / (cols - 1);
+  yStep = (height - 2 * margin[1]) / (rows - 1);
 
-  createGridPoints(xStart, yStart, xStep, yStep);
+  // Setup the colours
+  const [r, g, b] = [random(255), random(255), random(255)];
+  const [r2, g2, b2] = [random(255), random(255), random(255)];
 
-  noLoop(); // Prevents continuous drawing
+  // Halfway between the colours
+  const r3 = (r + r2) / 2;
+  const g3 = (g + g2) / 2;
+  const b3 = (b + b2) / 2;
+
+  colours = [color(r, g, b, 255), color(r, g, b, 210)];
+
+  // noLoop(); // Prevents continuous drawing
 }
 
 function draw() {
@@ -27,15 +40,9 @@ function draw() {
   // Increase the stroke weight
   strokeWeight(2);
 
-  const [r, g, b] = [random(255), random(255), random(255)];
-  const [r2, g2, b2] = [random(255), random(255), random(255)];
+  createGridPoints(xStart, yStart, xStep, yStep);
 
-  // Halfway between the colours
-  const r3 = (r + r2) / 2;
-  const g3 = (g + g2) / 2;
-  const b3 = (b + b2) / 2;
-
-  const colours = [color(r, g, b, 255), color(r, g, b, 210)];
+  time += 0.005;
 
   // Draw vertical lines
   for (let i = 0; i < cols; i++) {
@@ -67,6 +74,9 @@ function draw() {
 }
 
 function createGridPoints(xStart, yStart, xStep, yStep) {
+  // Reset the grid first
+  grid = [];
+
   // What direction do we want to shift the points in?
   const direction = createVector(1, 1);
 
@@ -100,7 +110,7 @@ function createGridPoints(xStart, yStart, xStep, yStep) {
 function getNoiseVal(x, y) {
   const noiseZoom = 0.0005;
 
-  let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom);
+  let noiseVal = noise(x * noiseZoom + time, y * noiseZoom + 0);
 
   // Map between -1 and 1
   // noiseVal = map(noiseVal, 0, 1, -1, 1);
@@ -113,7 +123,7 @@ function getNoiseVal(x, y) {
 // If frequency = 10, then the sine wave goes from -1 to 1 from input values 0 to 0.1
 // The sine wave then decreases from 1 to -1 and the input value goes from 0.1 to 0.2 and so on
 function transformNoise(x) {
-  const n = 20;
+  const n = 100;
 
   const frequency = 1 / n;
 
@@ -124,14 +134,16 @@ function transformNoise(x) {
   x *= n;
 
   // This must be less than 0.5. It determines what proportion of the sine wave is a straight line
-  const gap = 0.3;
+  const gap = 0;
 
   let start = 0.5 - gap;
   let end = 0.5 + gap;
 
   if (x > start && x < end) {
     y = 1;
-  } else if (x <= start) {
+  }
+  // Our increasing function
+  else if (x <= start) {
     x = map(x, 0, start, 0, 1);
     // Imagine a circle being drawn with centre (1, 0) and radius 1. We are using the top left quadrant as a function
     y = sqrt(1 - (x - 1) * (x - 1));
